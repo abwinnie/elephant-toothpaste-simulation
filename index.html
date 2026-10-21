@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff1f5">
+<meta name="description" content="調整反應物濃度與 RGB 色彩，觀察大象牙膏泡沫的 3D 噴發模擬。">
+<title>泡泡實驗室｜大象牙膏 3D 模擬</title>
+<style>
+:root{color-scheme:light;--ink:#432e3b;--muted:#927a85;--line:#efdae2;--pink:#e65089;--plum:#a24e6e;--paper:rgba(255,255,255,.88);--shadow:0 18px 55px rgba(147,77,104,.095)}
+*{box-sizing:border-box}html{min-width:320px;background:#fff4f7}body{min-width:320px;min-height:100vh;margin:0;color:var(--ink);background:radial-gradient(ellipse at 10% 0%,#ffdce8 0,transparent 32rem),radial-gradient(ellipse at 94% 15%,#ffe3eb 0,transparent 32rem),linear-gradient(145deg,#fff8f8,#fff0f5 60%,#fff9f7);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input{font:inherit}button{-webkit-tap-highlight-color:transparent}.page{width:min(1260px,calc(100% - 48px));margin:auto;padding:25px 0 28px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:25px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{display:grid;width:44px;height:44px;place-items:center;border:1px solid #efd6e0;border-radius:15px;color:#d74880;background:linear-gradient(145deg,#fff,#ffe4ed);box-shadow:0 6px 18px #c65d8324}.brand-mark svg{width:25px;height:25px}.brand-name{font-size:14px;font-weight:850;letter-spacing:.11em}.brand-caption{margin-top:3px;color:#a57e8d;font-size:10px;font-weight:650;letter-spacing:.18em}.top-note{display:flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid #dfc0cc;border-radius:99px;color:#825d6d;background:#ffffffa6;font-size:12px;font-weight:650;white-space:nowrap}.top-note svg{width:15px;height:15px;color:#d85a8b}
+.hero{margin-bottom:19px}.hero-copy{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:16px}.eyebrow{display:flex;align-items:center;gap:8px;margin:0 0 7px;color:#bd6587;font-size:11px;font-weight:850;letter-spacing:.2em}.eyebrow:before{width:17px;height:2px;border-radius:2px;background:#ed78a2;content:""}h1{margin:0;font-size:clamp(1.7rem,3vw,2.35rem);font-weight:850;letter-spacing:-.045em;line-height:1.25}.accent{color:#df5689}.hero-intro{max-width:430px;margin:0 2px 2px 0;color:#715563;font-size:13px;line-height:1.85}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:17px;align-items:stretch}.card{border:1px solid #efd8e1;border-radius:23px;background:var(--paper);box-shadow:var(--shadow);backdrop-filter:blur(14px)}
+.stage-card{position:relative;min-width:0;min-height:530px;overflow:hidden}.stage-head{position:absolute;z-index:3;top:17px;left:20px;right:20px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}.scene-label{display:flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid #ecd5de;border-radius:11px;color:#795c68;background:#fffffff0;box-shadow:0 4px 12px #693d780f;font-size:10px;font-weight:800;letter-spacing:.12em}.scene-label svg{width:14px;height:14px;color:#e45a8c}.live-status{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e6d7dc;border-radius:99px;color:#806e75;background:#fffffff0;font-size:11px;font-weight:750;letter-spacing:.06em}.status-dot{width:7px;height:7px;border-radius:50%;background:#c4afb7;box-shadow:0 0 0 4px #c4afb71f}.live-status[data-state=running] .status-dot{background:#ef5b92;box-shadow:0 0 0 4px #ef5b921f,0 0 12px #ef5b92a6;animation:pulse 1.25s ease-in-out infinite}.live-status[data-state=done] .status-dot{background:#70a989;box-shadow:0 0 0 4px #70a9891f}@keyframes pulse{50%{transform:scale(.76);opacity:.68}}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none}#scene:active{cursor:grabbing}.stage-hint{position:absolute;z-index:2;left:20px;bottom:17px;display:flex;align-items:center;gap:8px;color:#705360c7;font-size:10px;font-weight:650;pointer-events:none}.stage-hint svg{width:16px;height:16px}.color-chip{position:absolute;z-index:2;right:19px;bottom:17px;display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #ecd5de;border-radius:99px;color:#795c68;background:#ffffffe0;font-size:10px;font-weight:750}.color-dot{width:12px;height:12px;border:1px solid #4d23351f;border-radius:50%;background:rgb(255,55,136);box-shadow:0 0 8px #ff37885f}
+.side-card{display:flex;flex-direction:column;gap:14px;padding:19px}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.panel-heading h2{margin:0;font-size:15px;font-weight:850}.step-mark{display:grid;width:26px;height:26px;place-items:center;border:1px solid #f0d6e0;border-radius:9px;color:#cf5883;background:#fff2f6;font-size:11px;font-weight:850}.section-kicker{margin:0 -0px -5px;color:#a47787;font-size:10px;font-weight:850;letter-spacing:.14em;text-transform:uppercase}.slider-block{display:grid;gap:8px}.slider-label{display:flex;align-items:center;justify-content:space-between;gap:8px}.chem-name{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800}.chem-symbol{display:grid;min-width:38px;height:23px;place-items:center;padding:0 6px;border:1px solid #f0d8e1;border-radius:7px;color:#a94b70;background:#fff2f6;font-size:10px;font-weight:850}.range-value{min-width:42px;color:#cf4a7d;font-size:13px;font-weight:850;font-variant-numeric:tabular-nums;text-align:right}.slider-note{margin:-2px 0 0;color:#a0838d;font-size:10px;line-height:1.5}input[type=range]{width:100%;height:18px;margin:0;accent-color:#e8548c;cursor:pointer}.range-ends{display:flex;justify-content:space-between;margin-top:-6px;color:#b39aa4;font-size:9px;font-variant-numeric:tabular-nums}.divider{height:1px;background:linear-gradient(90deg,transparent,#efdae2 10%,#efdae2 90%,transparent)}
+.rgb-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.rgb-head label{font-size:12px;font-weight:800}.rgb-hint{color:#ad8d98;font-size:10px;font-weight:600}.rgb-preview{width:28px;height:20px;border:1px solid #4c283524;border-radius:7px;background:rgb(255,55,136);box-shadow:0 3px 9px #d73f782e}.rgb-control{display:grid;grid-template-columns:17px minmax(0,1fr) 38px;align-items:center;gap:7px}.rgb-letter{color:#957681;font-size:10px;font-weight:850}.rgb-control input[type=range]{height:16px;accent-color:#e85d91}.rgb-number{color:#886d78;font-size:10px;font-variant-numeric:tabular-nums;text-align:right}.rgb-control[data-channel=r] input{accent-color:#e15f78}.rgb-control[data-channel=g] input{accent-color:#70aa83}.rgb-control[data-channel=b] input{accent-color:#7298d0}.formula-note{display:flex;align-items:start;gap:8px;padding:10px 11px;border:1px solid #f1e1e7;border-radius:12px;color:#8e737e;background:linear-gradient(115deg,#fff7f9,#fff);font-size:10px;line-height:1.65}.formula-note svg{flex:0 0 15px;width:15px;height:15px;margin-top:1px;color:#d5688e}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:auto}.metric{position:relative;overflow:hidden;padding:12px;border:1px solid #f0dce3;border-radius:14px;background:linear-gradient(145deg,#fff,#fff5f8)}.metric:after{position:absolute;top:-20px;right:-18px;width:54px;height:54px;border-radius:50%;background:#ee689712;content:""}.metric-label{color:#977783;font-size:10px;font-weight:750}.metric-value{margin-top:5px;color:#67404f;font-size:clamp(19px,2.1vw,24px);font-weight:850;letter-spacing:-.045em;font-variant-numeric:tabular-nums;line-height:1}.metric-unit{margin-left:4px;color:#aa7d8c;font-size:10px;font-weight:750;letter-spacing:0}.metric-caption{margin-top:5px;color:#b0959f;font-size:9px}
+.footer{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:18px}.actions{display:flex;align-items:center;justify-content:center;gap:10px;width:100%}.action{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:49px;padding:0 21px;border:1px solid transparent;border-radius:15px;font-size:13px;font-weight:850;letter-spacing:.035em;cursor:pointer;transition:transform .16s,box-shadow .16s,opacity .16s}.action:hover:not(:disabled){transform:translateY(-2px)}.action:active:not(:disabled){transform:translateY(0)}.action:disabled{opacity:.5;cursor:not-allowed}.action-primary{min-width:196px;color:#fff;background:linear-gradient(125deg,#f27da7,#dc4d87);box-shadow:0 9px 24px #d6498040,inset 0 1px #ffffff40}.action-primary:hover:not(:disabled){box-shadow:0 12px 27px #d6498050,inset 0 1px #ffffff40}.action-secondary{color:#88586d;border-color:#ead1db;background:#ffffffba}.action svg{width:17px;height:17px}.footer-note{margin:0;color:#a1838e;font-size:10px;text-align:center;line-height:1.65}
+.learning-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:21px}.learning-item{display:flex;align-items:start;gap:10px;padding:13px 15px;border:1px solid #eed7e0e6;border-radius:15px;background:#ffffff9e}.learn-icon{display:grid;flex:0 0 28px;width:28px;height:28px;place-items:center;border:1px solid #f0dce3;border-radius:9px;color:#d45e89;background:#fff6f8;font-size:12px;font-weight:850}.learn-title{margin:1px 0 4px;color:#684956;font-size:10px;font-weight:850}.learn-body{margin:0;color:#9b7e89;font-size:9px;line-height:1.55}.page-foot{display:flex;justify-content:space-between;gap:16px;margin-top:19px;padding:12px 2px 0;border-top:1px solid #ddb8c666;color:#af909b;font-size:9px}.page-foot strong{color:#9e7483;font-weight:800;letter-spacing:.06em}button:focus-visible,input:focus-visible{outline:3px solid #e2538959;outline-offset:3px}.no-webgl{position:absolute;z-index:4;inset:0;display:grid;place-items:center;padding:32px;color:#825d6d;background:#fff5f7;text-align:center}
+@media(max-width:920px){.workspace{grid-template-columns:minmax(0,1fr) 310px;gap:13px}.stage-card{min-height:485px}.side-card{padding:16px;gap:13px}}
+@media(max-width:760px){.page{width:min(calc(100% - 28px),600px);padding-top:16px}.topbar{margin-bottom:20px}.top-note{padding:8px 10px;font-size:10px}.hero-copy{display:block}.hero-intro{margin-top:9px;font-size:12px}.workspace{grid-template-columns:1fr}.stage-card{min-height:clamp(390px,74vw,520px)}.side-card{display:grid;grid-template-columns:1fr 1fr;gap:13px 16px;padding:17px}.panel-heading,.section-kicker,.rgb-head,.rgb-control,.formula-note,.metrics{grid-column:1/-1}.section-kicker{margin-bottom:-5px}.divider{display:none}.formula-note,.metrics{margin-top:0}.learning-strip{grid-template-columns:1fr;gap:8px;margin-top:15px}.learning-item{padding:10px 12px}}
+@media(max-width:460px){.page{width:calc(100% - 22px)}.brand-mark{width:39px;height:39px;border-radius:13px}.brand-name{font-size:12px}.brand-caption{font-size:8px}.top-note{gap:6px;max-width:132px;white-space:normal;line-height:1.3}h1{font-size:1.72rem}.stage-card{min-height:405px;border-radius:18px}.stage-head{top:12px;left:12px;right:12px}.scene-label{padding:7px 8px;font-size:8px}.live-status{padding:7px 9px;font-size:9px}.stage-hint{left:12px;bottom:12px;font-size:9px}.color-chip{right:11px;bottom:10px;padding:6px 8px;font-size:9px}.side-card{gap:12px;padding:14px;border-radius:18px}.action{min-height:47px;padding:0 15px;font-size:12px}.action-primary{min-width:165px}.footer-note{font-size:9px}.page-foot{flex-direction:column;gap:4px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"}}</script>
+</head>
+<body>
+<main class="page">
+<header class="topbar">
+  <div class="brand"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9 3.5h6M10 3.5v6.1L4.7 18a2 2 0 0 0 1.7 3h11.2a2 2 0 0 0 1.7-3L14 9.6V3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.1 16.4h9.8M9.1 13.3l.1.1m5.5 1.2.1.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="brand-name">泡泡實驗室</div><div class="brand-caption">BUBBLE LAB · 3D CHEMISTRY</div></div></div>
+  <div class="top-note"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2.5 12.1 7l4.9.7-3.5 3.4.8 4.9-4.3-2.3-4.3 2.3.8-4.9L3 7.7 7.9 7 10 2.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>拖曳畫面，可環視泡沫</div>
+</header>
+<section class="hero" aria-labelledby="main-title">
+  <div class="hero-copy"><div><p class="eyebrow">CHEMISTRY IN MOTION</p><h1 id="main-title">大象牙膏，<span class="accent">粉紅噴發！</span></h1></div><p class="hero-intro">調配反應物濃度、混合專屬色彩，按下啟動鈕，看看泡沫如何從燒瓶裡奔湧而出。</p></div>
+  <div class="workspace">
+    <section class="card stage-card" aria-label="大象牙膏 3D 實驗場景">
+      <div class="stage-head"><div class="scene-label"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 3h8M7 3v5l-4 7.1A1.9 1.9 0 0 0 4.6 18h10.8a1.9 1.9 0 0 0 1.6-2.9L13 8V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>反應觀察窗</div><div class="live-status" id="statusPill" data-state="ready" aria-live="polite"><span class="status-dot"></span><span id="statusText">準備就緒</span></div></div>
+      <canvas id="scene" aria-label="可拖曳旋轉的燒瓶與泡沫 3D 場景"></canvas>
+      <div class="stage-hint"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6.2 9.1V5.8a1.2 1.2 0 0 1 2.4 0v2.5-4a1.2 1.2 0 0 1 2.4 0v4-3.1a1.2 1.2 0 0 1 2.4 0v4.1-2.1a1.2 1.2 0 0 1 2.4 0v5.2c0 3.1-1.8 5-4.8 5h-1.2c-2.3 0-3.5-1.2-4.5-3l-1.6-2.8a1.2 1.2 0 0 1 2.1-1.2l1.1 1.7V9.1Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>拖曳旋轉 · 滾輪縮放</div>
+      <div class="color-chip"><span class="color-dot" id="sceneColorDot"></span><span>泡沫色彩</span></div>
+    </section>
+    <aside class="card side-card" aria-label="實驗參數">
+      <div class="panel-heading"><h2>調整實驗條件</h2><span class="step-mark">01</span></div>
+      <p class="section-kicker">反應物濃度</p>
+      <div class="slider-block"><div class="slider-label"><label class="chem-name" for="h2o2"><span class="chem-symbol">H₂O₂</span>過氧化氫</label><output class="range-value" id="h2o2Value" for="h2o2">70%</output></div><input id="h2o2" type="range" min="0" max="100" value="70" aria-label="過氧化氫濃度百分比"><div class="range-ends"><span>0% 稀</span><span>100% 濃</span></div><p class="slider-note">提供反應產生氧氣的原料</p></div>
+      <div class="slider-block"><div class="slider-label"><label class="chem-name" for="ki"><span class="chem-symbol">KI</span>碘化鉀</label><output class="range-value" id="kiValue" for="ki">55%</output></div><input id="ki" type="range" min="0" max="100" value="55" aria-label="碘化鉀濃度百分比"><div class="range-ends"><span>0% 慢</span><span>100% 快</span></div><p class="slider-note">催化分解，改變噴發速度</p></div>
+      <div class="divider"></div>
+      <div class="rgb-head"><label for="red">調和泡沫顏色 <span class="rgb-hint">· RGB</span></label><span class="rgb-preview" id="rgbPreview" aria-label="調和後顏色"></span></div>
+      <div class="rgb-control" data-channel="r"><span class="rgb-letter">R</span><input id="red" type="range" min="0" max="255" value="255" aria-label="紅色分量"><output class="rgb-number" id="redValue" for="red">255</output></div>
+      <div class="rgb-control" data-channel="g"><span class="rgb-letter">G</span><input id="green" type="range" min="0" max="255" value="55" aria-label="綠色分量"><output class="rgb-number" id="greenValue" for="green">55</output></div>
+      <div class="rgb-control" data-channel="b"><span class="rgb-letter">B</span><input id="blue" type="range" min="0" max="255" value="136" aria-label="藍色分量"><output class="rgb-number" id="blueValue" for="blue">136</output></div>
+      <div class="formula-note"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.1" stroke="currentColor" stroke-width="1.4"/><path d="M10 9v4M10 6.5h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>H₂O₂ 決定泡沫總量，KI 調整反應快慢；氧氣會把液體撐成泡沫。</span></div>
+      <div class="metrics" aria-live="polite"><div class="metric"><div class="metric-label">泡沫預估體積</div><div class="metric-value"><span id="volumeValue">1,190</span><span class="metric-unit">mL</span></div><div class="metric-caption">模型估算 · 反應完成</div></div><div class="metric"><div class="metric-label">泡沫預估重量</div><div class="metric-value"><span id="massValue">190</span><span class="metric-unit">g</span></div><div class="metric-caption">依泡沫密度換算</div></div></div>
+    </aside>
+  </div>
+  <footer class="footer"><div class="actions"><button class="action action-primary" id="runBtn" type="button"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.2 4.6 15 9.1a1 1 0 0 1 0 1.8l-7.8 4.5A1 1 0 0 1 5.7 14.5v-9a1 1 0 0 1 1.5-.9Z" fill="currentColor"/></svg><span>開始噴發</span></button><button class="action action-secondary" id="resetBtn" type="button"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.8 7.2A6.5 6.5 0 1 1 3.5 11M3.8 4v3.5h3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>重置實驗</button></div><p class="footer-note">按下「開始噴發」後，觀察液面下降、泡沫升騰與堆積的過程。</p></footer>
+</section>
+<section class="learning-strip" aria-label="實驗小知識">
+<article class="learning-item"><span class="learn-icon">H₂O₂</span><div><h2 class="learn-title">泡沫從哪裡來？</h2><p class="learn-body">過氧化氫分解成水和氧氣，洗碗精把氧氣包進大量泡泡。</p></div></article>
+<article class="learning-item"><span class="learn-icon">KI</span><div><h2 class="learn-title">為什麼噴得這麼快？</h2><p class="learn-body">碘化鉀是催化劑，幫助反應加速；反應前後本身不會被消耗。</p></div></article>
+<article class="learning-item"><span class="learn-icon">↗</span><div><h2 class="learn-title">泡沫會變熱喔</h2><p class="learn-body">此分解反應會放熱。網頁僅為視覺化模擬，不代表真實實驗數據。</p></div></article>
+</section>
+<div class="page-foot"><strong>泡泡實驗室 · 大象牙膏模擬</strong><span>互動教學模型 · 體積與重量為模擬估算值</span></div>
+</main>
+<script type="module">
+
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const canvas=document.getElementById("scene"),statusPill=document.getElementById("statusPill"),statusText=document.getElementById("statusText"),runBtn=document.getElementById("runBtn"),volumeValue=document.getElementById("volumeValue"),massValue=document.getElementById("massValue");
+const colorInputs=[document.getElementById("red"),document.getElementById("green"),document.getElementById("blue")],colorOutputs=[document.getElementById("redValue"),document.getElementById("greenValue"),document.getElementById("blueValue")];
+const H=2.95,MAX_PARTICLES=1450,GRAVITY=5.1;
+const wallProfile=[[.18,.61],[.28,.79],[.5,1.02],[.78,1.27],[1.06,1.43],[1.36,1.49],[1.55,1.48],[1.69,1.4],[1.83,1.19],[1.97,.8],[2.08,.48],[2.14,.37],[2.95,.37]];
+const flaskInner=[[.18,.54],[.26,.66],[.46,.84],[.72,1.07],[1,1.31],[1.3,1.39],[1.49,1.38],[1.62,1.3],[1.78,1.08],[1.93,.72],[2.03,.43],[2.1,.34]];
+let scene,camera,renderer,controls,foamMesh,liquidMesh,meniscus,particles=[],active=false,elapsed=0,duration=0,targetCount=0,emitted=0,currentColor=new THREE.Color(1,.12,.43),lastTime=performance.now();
+
+function status(state,msg){statusPill.dataset.state=state;statusText.textContent=msg}
+function percent(id){return Number(document.getElementById(id).value)/100}
+function fmt(n){return Math.round(n).toLocaleString("en-US")}
+function estimate(){const h=percent("h2o2"),k=percent("ki"),vol=Math.round(h*(1420+440*k));volumeValue.textContent=fmt(vol);massValue.textContent=fmt(vol*.16);return vol}
+function updateColor(){
+ const rgb=colorInputs.map(x=>Number(x.value)),[r,g,b]=rgb;currentColor=new THREE.Color(r/255,g/255,b/255);
+ document.getElementById("rgbPreview").style.backgroundColor="rgb("+r+","+g+","+b+")";
+ const dot=document.getElementById("sceneColorDot");dot.style.backgroundColor="rgb("+r+","+g+","+b+")";dot.style.boxShadow="0 0 9px rgba("+r+","+g+","+b+",.42)";
+ colorOutputs.forEach((x,i)=>x.textContent=rgb[i]);if(foamMesh&&particles.length)drawFoam()
+}
+function noiseTexture(){
+ const c=document.createElement("canvas");c.width=c.height=128;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,128,128);
+ for(let i=0;i<1100;i++){const r=Math.random()*2.5+.2;x.fillStyle="rgba(198,128,156,"+(Math.random()*.22)+")";x.beginPath();x.arc(Math.random()*128,Math.random()*128,r,0,Math.PI*2);x.fill()}
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(1.4,1.4);return t
+}
+function radiusAt(y,profile){if(y<=profile[0][0])return profile[0][1];for(let i=1;i<profile.length;i++)if(y<=profile[i][0]){const a=profile[i-1],b=profile[i],t=(y-a[0])/(b[0]-a[0]);return a[1]+(b[1]-a[1])*t}return profile[profile.length-1][1]}
+function liquidProfile(level){const p=[new THREE.Vector2(0,.17),new THREE.Vector2(.48,.17)],steps=22;for(let i=1;i<=steps;i++){const y=.18+(level-.18)*i/steps;p.push(new THREE.Vector2(Math.max(.2,radiusAt(y,flaskInner)-.035),y))}p.push(new THREE.Vector2(0,level));return p}
+function setLiquid(y){if(liquidMesh){liquidMesh.geometry.dispose();liquidMesh.geometry=new THREE.LatheGeometry(liquidProfile(y),64)}if(meniscus){meniscus.geometry.dispose();meniscus.geometry=new THREE.TorusGeometry(Math.max(.28,radiusAt(y,flaskInner)-.06),.012,8,72);meniscus.position.y=y}}
+function createBottle(){
+ const group=new THREE.Group(),points=[[.61,.055],[.74,.075],[.86,.16],[.98,.38],[1.18,.72],[1.39,1.1],[1.49,1.4],[1.49,1.56],[1.43,1.69],[1.24,1.84],[.94,1.98],[.59,2.07],[.39,2.12],[.365,2.18],[.365,2.92],[.405,2.92],[.405,2.13],[.57,2.09],[.91,2.01],[1.22,1.86],[1.36,1.71],[1.4,1.56],[1.37,1.4],[1.27,1.12],[1.09,.76],[.89,.42],[.73,.22],[.57,.17]].map(p=>new THREE.Vector2(p[0],p[1]));
+ const glass=new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.34,roughness:.08,metalness:.015,clearcoat:1,clearcoatRoughness:.035,transmission:.95,ior:1.5,thickness:.2,side:THREE.DoubleSide,depthWrite:false});
+ const body=new THREE.Mesh(new THREE.LatheGeometry(points,80),glass);body.castShadow=true;body.receiveShadow=true;body.renderOrder=2;group.add(body);
+ const lip=new THREE.Mesh(new THREE.TorusGeometry(.385,.027,16,80),new THREE.MeshPhysicalMaterial({color:0xe8f7f8,transparent:true,opacity:.8,roughness:.12,clearcoat:1,transmission:.5}));lip.rotation.x=Math.PI/2;lip.position.y=2.92;lip.castShadow=true;group.add(lip);
+ const foot=new THREE.Mesh(new THREE.TorusGeometry(.665,.052,16,72),new THREE.MeshPhysicalMaterial({color:0xe9f6f7,transparent:true,opacity:.55,roughness:.1,clearcoat:1,transmission:.35}));foot.rotation.x=Math.PI/2;foot.position.y=.105;foot.castShadow=true;group.add(foot);
+ const liquidMat=new THREE.MeshPhysicalMaterial({color:0xff4eae,emissive:0x6c123f,emissiveIntensity:.22,transparent:true,opacity:.78,roughness:.19,clearcoat:.95,clearcoatRoughness:.08,transmission:.2,ior:1.34,side:THREE.DoubleSide});
+ liquidMesh=new THREE.Mesh(new THREE.LatheGeometry(liquidProfile(.86),64),liquidMat);liquidMesh.receiveShadow=true;liquidMesh.renderOrder=1;group.add(liquidMesh);
+ meniscus=new THREE.Mesh(new THREE.TorusGeometry(radiusAt(.86,flaskInner)-.06,.012,8,72),new THREE.MeshBasicMaterial({color:0xffabe0,transparent:true,opacity:.75}));meniscus.rotation.x=Math.PI/2;meniscus.position.y=.86;group.add(meniscus);
+ group.position.y=.025;scene.add(group);return group
+}
+function initFoam(){const geo=new THREE.SphereGeometry(.14,12,10),mat=new THREE.MeshPhysicalMaterial({color:0xffffff,map:noiseTexture(),transparent:true,opacity:.92,roughness:.36,clearcoat:.34,clearcoatRoughness:.28,sheen:.48,sheenColor:new THREE.Color(0xffd7e8),depthWrite:false,vertexColors:true});foamMesh=new THREE.InstancedMesh(geo,mat,MAX_PARTICLES);foamMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);foamMesh.castShadow=true;foamMesh.receiveShadow=true;foamMesh.frustumCulled=false;foamMesh.renderOrder=3;scene.add(foamMesh)}
+function drawFoam(){
+ const dummy=new THREE.Object3D(),color=new THREE.Color(),hsl={h:0,s:0,l:0};currentColor.getHSL(hsl);
+ for(let i=0;i<particles.length;i++){const p=particles[i];dummy.position.copy(p.pos);dummy.rotation.set(p.rx,p.ry,p.rz);const squash=p.settled?.68:(p.pos.y<p.size*2?.86:1);dummy.scale.set(p.size*1.12,p.size*squash,p.size*1.12);dummy.updateMatrix();foamMesh.setMatrixAt(i,dummy.matrix);color.setHSL((hsl.h+p.hue+1)%1,THREE.MathUtils.clamp(hsl.s*p.sat,0,1),THREE.MathUtils.clamp(hsl.l+p.light,.16,.88));foamMesh.setColorAt(i,color)}
+ foamMesh.count=particles.length;foamMesh.instanceMatrix.needsUpdate=true;if(foamMesh.instanceColor)foamMesh.instanceColor.needsUpdate=true
+}
+function makeParticle(progress){
+ const angle=Math.random()*Math.PI*2,r=Math.random()*.19,pressure=1-progress*.8,speed=(8.8+2.1*percent("ki"))*pressure,pos=new THREE.Vector3(Math.cos(angle)*r,H+.02,Math.sin(angle)*r),vel=new THREE.Vector3((Math.random()-.5)*.6,speed*(.89+Math.random()*.22),(Math.random()-.5)*.6),peak=H+vel.y*vel.y/(2*GRAVITY);
+ return {pos,vel,size:.105+Math.random()*.12,settled:false,wall:false,age:0,peak,spread:H+(peak-H)*.76,hue:(Math.random()-.5)*.045,sat:.87+Math.random()*.18,light:(Math.random()-.5)*.18,rx:Math.random()*Math.PI,ry:Math.random()*Math.PI,rz:Math.random()*Math.PI,seed:Math.random()*20}
+}
+function settle(p){
+ const radial=Math.hypot(p.pos.x,p.pos.z),count=particles.reduce((n,q)=>n+(q.settled?1:0),0),pile=Math.min(.96,count*.00105),profile=Math.exp(-radial*radial/30);
+ p.pos.y=p.size*.48+pile*profile;p.vel.set(p.vel.x*.18,0,p.vel.z*.18);p.wall=false;p.slide=.25+Math.random()*.45
+}
+function stepParticles(dt){
+ const wind=Math.sin(elapsed*1.7)*.11;
+ for(const p of particles){if(p.settled)continue;p.age+=dt;p.vel.y-=GRAVITY*dt;p.vel.x*=Math.max(0,1-dt*.12);p.vel.z*=Math.max(0,1-dt*.12);
+  if(p.pos.y>p.spread){const rr=Math.hypot(p.pos.x,p.pos.z)||1,expand=.56+Math.min(1,p.age*.3);p.vel.x+=(p.pos.x/rr)*expand*dt+(Math.sin(p.seed+elapsed*2.1)+wind)*dt*.48;p.vel.z+=(p.pos.z/rr)*expand*dt+Math.cos(p.seed*1.7+elapsed*1.8)*dt*.3}
+  else{p.vel.x+=Math.sin(p.seed+elapsed*2.4)*dt*.16;p.vel.z+=Math.cos(p.seed+elapsed*2)*dt*.16}
+  p.pos.addScaledVector(p.vel,dt);const radial=Math.hypot(p.pos.x,p.pos.z);
+  if(p.pos.y>.16&&p.pos.y<H&&radial>.0001){const wall=radiusAt(p.pos.y,wallProfile);if(radial<wall+p.size*.45){const s=(wall+p.size*.45)/radial;p.pos.x*=s;p.pos.z*=s;p.vel.x+=(p.pos.x/radial)*.55;p.vel.z+=(p.pos.z/radial)*.55;p.vel.y*=.78;p.wall=true}else p.wall=false}
+  if(p.pos.y<p.size*.52)settle(p);else if(p.wall&&p.vel.y<0&&p.pos.y<2.2){p.vel.x*=.94;p.vel.z*=.94;if(p.pos.y<.3)settle(p)}
+  p.rx+=p.vel.z*dt;p.rz-=p.vel.x*dt
+ }
+}
+function reset(){
+ active=false;elapsed=0;duration=targetCount=emitted=0;particles=[];if(foamMesh){foamMesh.count=0;foamMesh.instanceMatrix.needsUpdate=true}setLiquid(.86);runBtn.disabled=false;runBtn.querySelector("span").textContent="開始噴發";status("ready","準備就緒");if(controls){controls.target.set(0,4.25,0);controls.update()}
+}
+function start(){
+ if(active)return;if(percent("h2o2")<=0){status("ready","請加入 H₂O₂");return}
+ reset();const vol=estimate(),k=percent("ki");if(!vol)return;active=true;duration=8.5+(1-k)*12.5;targetCount=Math.min(MAX_PARTICLES,Math.max(120,Math.round(220+vol*.62)));runBtn.disabled=true;runBtn.querySelector("span").textContent="反應進行中";status("running","噴發中")
+}
+function resize(){if(!renderer||!camera)return;const box=canvas.parentElement.getBoundingClientRect();renderer.setSize(Math.max(1,box.width),Math.max(1,box.height),false);camera.aspect=box.width/box.height;camera.updateProjectionMatrix()}
+function animate(now){
+ requestAnimationFrame(animate);const time=now||performance.now(),dt=Math.min(.032,Math.max(0,(time-lastTime)/1000));lastTime=time;
+ if(active){elapsed+=dt;const progress=Math.min(1,elapsed/duration),eased=1-Math.pow(1-progress,1.7);setLiquid(.86-.57*(1-Math.pow(1-progress,1.35)));let n=Math.min(12,Math.min(targetCount,Math.floor(targetCount*eased))-emitted);while(n>0&&particles.length<MAX_PARTICLES){particles.push(makeParticle(progress));emitted++;n--}if(progress>=1||emitted>=targetCount){active=false;runBtn.disabled=false;runBtn.querySelector("span").textContent="再噴發一次";status("done","反應完成")}}
+ if(particles.length){stepParticles(dt);drawFoam()}controls.update();renderer.render(scene,camera)
+}
+function init(){
+ try{renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:"high-performance"})}
+ catch(e){const fallback=document.createElement("div");fallback.className="no-webgl";fallback.textContent="此瀏覽器目前無法啟用 3D 顯示，請改用支援 WebGL 的新版瀏覽器。";canvas.parentElement.appendChild(fallback);runBtn.disabled=true;return}
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.65));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.setClearColor(0xfbeaf0,0);
+ scene=new THREE.Scene();scene.fog=new THREE.Fog(0xf9edf1,22,47);const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=pmrem.fromScene(room,.04).texture;room.dispose();pmrem.dispose();
+ camera=new THREE.PerspectiveCamera(40,1,.1,180);camera.position.set(8.5,14.2,10.6);controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,4.25,0);controls.enableDamping=true;controls.dampingFactor=.055;controls.minDistance=9;controls.maxDistance=25;controls.minPolarAngle=.22;controls.maxPolarAngle=Math.PI*.48;controls.update();
+ scene.add(new THREE.HemisphereLight(0xfff5f8,0x7b7278,2.15));const key=new THREE.DirectionalLight(0xffffff,3.6);key.position.set(6,15,7);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-13;key.shadow.camera.right=13;key.shadow.camera.top=16;key.shadow.camera.bottom=-13;key.shadow.bias=-.00025;key.shadow.normalBias=.035;key.shadow.radius=5;scene.add(key);const fill=new THREE.DirectionalLight(0xffc6d8,1.25);fill.position.set(-8,8,-6);scene.add(fill);const rim=new THREE.PointLight(0xffd3e2,26,24,2);rim.position.set(-1,6,2.5);scene.add(rim);
+ const floor=new THREE.Mesh(new THREE.PlaneGeometry(1000,1000),new THREE.MeshStandardMaterial({color:0xc6c2c4,roughness:.9}));floor.rotation.x=-Math.PI/2;floor.position.y=-.015;floor.receiveShadow=true;scene.add(floor);
+ const pad=new THREE.Mesh(new THREE.CylinderGeometry(2.6,2.6,.035,96),new THREE.MeshStandardMaterial({color:0xb5afb2,roughness:.88}));pad.position.y=.005;pad.receiveShadow=true;pad.castShadow=true;scene.add(pad);
+ createBottle();initFoam();updateColor();new ResizeObserver(resize).observe(canvas.parentElement);resize();animate()
+}
+document.getElementById("h2o2").addEventListener("input",function(){document.getElementById("h2o2Value").textContent=this.value+"%";estimate()});
+document.getElementById("ki").addEventListener("input",function(){document.getElementById("kiValue").textContent=this.value+"%";estimate()});
+colorInputs.forEach(x=>x.addEventListener("input",updateColor));runBtn.addEventListener("click",start);document.getElementById("resetBtn").addEventListener("click",reset);window.addEventListener("resize",resize);init();estimate();
+</script>
+</body>
+</html>
+
