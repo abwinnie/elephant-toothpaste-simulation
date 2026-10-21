@@ -112,7 +112,7 @@ function drawFoam(){
  foamMesh.count=particles.length;foamMesh.instanceMatrix.needsUpdate=true;if(foamMesh.instanceColor)foamMesh.instanceColor.needsUpdate=true
 }
 function makeParticle(progress){
- const angle=Math.random()*Math.PI*2,r=Math.random()*.19,pressure=1-progress*.8,speed=(8.8+2.1*percent("ki"))*pressure,pos=new THREE.Vector3(Math.cos(angle)*r,H+.02,Math.sin(angle)*r),vel=new THREE.Vector3((Math.random()-.5)*.6,speed*(.89+Math.random()*.22),(Math.random()-.5)*.6),peak=H+vel.y*vel.y/(2*GRAVITY);
+ const angle=Math.random()*Math.PI*2,r=Math.random()*.19,pressure=1-progress*.8,speed=(8.2+1.4*percent("ki"))*pressure,pos=new THREE.Vector3(Math.cos(angle)*r,H+.02,Math.sin(angle)*r),vel=new THREE.Vector3((Math.random()-.5)*.6,speed*(.89+Math.random()*.22),(Math.random()-.5)*.6),peak=H+vel.y*vel.y/(2*GRAVITY);
  return {pos,vel,size:.105+Math.random()*.12,settled:false,wall:false,age:0,peak,spread:H+(peak-H)*.76,hue:(Math.random()-.5)*.045,sat:.87+Math.random()*.18,light:(Math.random()-.5)*.18,rx:Math.random()*Math.PI,ry:Math.random()*Math.PI,rz:Math.random()*Math.PI,seed:Math.random()*20}
 }
 function settle(p){
@@ -131,11 +131,11 @@ function stepParticles(dt){
  }
 }
 function reset(){
- active=false;elapsed=0;duration=targetCount=emitted=0;particles=[];if(foamMesh){foamMesh.count=0;foamMesh.instanceMatrix.needsUpdate=true}setLiquid(.86);runBtn.disabled=false;runBtn.querySelector("span").textContent="開始噴發";status("ready","準備就緒");if(controls){controls.target.set(0,4.25,0);controls.update()}
+ active=false;elapsed=0;duration=targetCount=emitted=0;particles=[];if(foamMesh){foamMesh.count=0;foamMesh.instanceMatrix.needsUpdate=true}setLiquid(.86);runBtn.disabled=false;runBtn.querySelector("span").textContent="開始噴發";status("ready","準備就緒");if(controls){controls.target.set(0,4.25,0);camera.position.set(8.5,14.2,10.6);camera.fov=40;camera.updateProjectionMatrix();controls.update()}
 }
 function start(){
  if(active)return;if(percent("h2o2")<=0){status("ready","請加入 H₂O₂");return}
- reset();const vol=estimate(),k=percent("ki");if(!vol)return;active=true;duration=8.5+(1-k)*12.5;targetCount=Math.min(MAX_PARTICLES,Math.max(120,Math.round(220+vol*.62)));runBtn.disabled=true;runBtn.querySelector("span").textContent="反應進行中";status("running","噴發中")
+ reset();const vol=estimate(),k=percent("ki");if(!vol)return;controls.target.set(0,5.3,0);camera.position.set(0,5.3,0).add(new THREE.Vector3(8.5,9.95,10.6).normalize().multiplyScalar(18.3));camera.fov=42;camera.updateProjectionMatrix();controls.update();active=true;duration=8.5+(1-k)*12.5;targetCount=Math.min(MAX_PARTICLES,Math.max(120,Math.round(220+vol*.62)));runBtn.disabled=true;runBtn.querySelector("span").textContent="反應進行中";status("running","噴發中")
 }
 function resize(){if(!renderer||!camera)return;const box=canvas.parentElement.getBoundingClientRect();renderer.setSize(Math.max(1,box.width),Math.max(1,box.height),false);camera.aspect=box.width/box.height;camera.updateProjectionMatrix()}
 function animate(now){
