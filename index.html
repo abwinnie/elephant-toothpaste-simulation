@@ -139,7 +139,7 @@ function stepParticles(dt){
  }
 }
 function reset(){
-  active=false;elapsed=0;duration=targetCount=emitted=0;particles=[];if(foamMesh){foamMesh.count=0;foamMesh.instanceMatrix.needsUpdate=true}drawBlobFoam(0);setLiquid(.86);runBtn.disabled=false;runBtn.querySelector("span").textContent="開始噴發";status("ready","準備就緒");if(controls){controls.target.set(0,4.25,0);camera.position.set(8.5,14.2,10.6);camera.fov=40;camera.updateProjectionMatrix();controls.update()}
+  active=false;elapsed=0;duration=targetCount=emitted=0;particles=[];if(foamMesh){foamMesh.count=0;foamMesh.instanceMatrix.needsUpdate=true}drawBlobFoam(0);setLiquid(.86);runBtn.disabled=false;runBtn.querySelector("span").textContent="開始噴發";status("ready","準備就緒");if(controls){controls.target.set(0,2,0);camera.position.set(7.5,8.8,7.5);camera.fov=40;camera.updateProjectionMatrix();controls.update()}
 }
 function start(){
  if(active)return;if(percent("h2o2")<=0){status("ready","請加入 H₂O₂");return}
@@ -156,7 +156,7 @@ function init(){
  catch(e){const fallback=document.createElement("div");fallback.className="no-webgl";fallback.textContent="此瀏覽器目前無法啟用 3D 顯示，請改用支援 WebGL 的新版瀏覽器。";canvas.parentElement.appendChild(fallback);runBtn.disabled=true;return}
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.65));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.setClearColor(0xfbeaf0,0);
  scene=new THREE.Scene();scene.fog=new THREE.Fog(0xf9edf1,22,47);const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=pmrem.fromScene(room,.04).texture;room.dispose();pmrem.dispose();
- camera=new THREE.PerspectiveCamera(40,1,.1,180);camera.position.set(8.5,14.2,10.6);controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,4.25,0);controls.enableDamping=true;controls.dampingFactor=.055;controls.minDistance=9;controls.maxDistance=25;controls.minPolarAngle=.22;controls.maxPolarAngle=Math.PI*.48;controls.update();
+ camera=new THREE.PerspectiveCamera(40,1,.1,180);camera.position.set(7.5,8.8,7.5);controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,2,0);controls.enableDamping=true;controls.dampingFactor=.055;controls.minDistance=9;controls.maxDistance=25;controls.minPolarAngle=.22;controls.maxPolarAngle=Math.PI*.48;controls.update();
  scene.add(new THREE.HemisphereLight(0xfff5f8,0x7b7278,2.15));const key=new THREE.DirectionalLight(0xffffff,3.6);key.position.set(6,15,7);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-13;key.shadow.camera.right=13;key.shadow.camera.top=16;key.shadow.camera.bottom=-13;key.shadow.bias=-.00025;key.shadow.normalBias=.035;key.shadow.radius=5;scene.add(key);const fill=new THREE.DirectionalLight(0xffc6d8,1.25);fill.position.set(-8,8,-6);scene.add(fill);const rim=new THREE.PointLight(0xffd3e2,26,24,2);rim.position.set(-1,6,2.5);scene.add(rim);
  const floor=new THREE.Mesh(new THREE.PlaneGeometry(1000,1000),new THREE.MeshStandardMaterial({color:0xc6c2c4,roughness:.9}));floor.rotation.x=-Math.PI/2;floor.position.y=-.015;floor.receiveShadow=true;scene.add(floor);
  const pad=new THREE.Mesh(new THREE.CylinderGeometry(2.6,2.6,.035,96),new THREE.MeshStandardMaterial({color:0xb5afb2,roughness:.88}));pad.position.y=.005;pad.receiveShadow=true;pad.castShadow=true;scene.add(pad);
